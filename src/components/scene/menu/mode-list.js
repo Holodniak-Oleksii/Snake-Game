@@ -27,26 +27,27 @@ class ModeList extends Container {
     const modes = Object.values(GAME_MODE);
     modes.forEach((mode, index) => {
       let isChecked = mode === this.user.getGameMode();
-      const checkbox = new Checkbox(isChecked, mode);
+      const checkbox = new Checkbox(isChecked, mode, this.handleCheckboxToggle);
       checkbox.y = index * 40;
       checkbox.x = 20;
-
-      checkbox.onChange((checked) => {
-        if (checked) {
-          this.user.setGameMode(mode);
-          this.#updateCheckboxes(mode);
-        }
-      });
 
       this.checkboxes.push(checkbox);
       this.addChild(checkbox);
     });
   }
 
+  handleCheckboxToggle = (selectedMode) => {
+    if (selectedMode === this.user.getGameMode()) {
+      return;
+    }
+
+    this.user.setGameMode(selectedMode);
+    this.#updateCheckboxes(selectedMode);
+  };
+
   #updateCheckboxes(selectedMode) {
     this.checkboxes.forEach((checkbox) => {
-      checkbox.checked = checkbox.title === selectedMode;
-      checkbox.checkMark.visible = checkbox.checked;
+      checkbox.setChecked(checkbox.title === selectedMode);
     });
 
     this.updateCallback();

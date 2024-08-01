@@ -7,11 +7,12 @@ const svgString = `
 `;
 
 class Checkbox extends Container {
-  constructor(checked = false, title = "") {
+  constructor(checked = false, title = "", onToggle) {
     super();
     this.checked = checked;
     this.size = 24;
     this.title = title;
+    this.onToggle = onToggle;
 
     this.container = new Container();
     this.addChild(this.container);
@@ -64,16 +65,12 @@ class Checkbox extends Container {
   }
 
   toggle = () => {
-    this.checked = !this.checked;
-    this.checkMark.visible = this.checked;
-
-    if (this.changeListener) {
-      this.changeListener(this.checked);
-    }
+    this.onToggle(this.title);
   };
 
-  onChange(listener) {
-    this.changeListener = listener;
+  setChecked(checked) {
+    this.checked = checked;
+    this.checkMark.visible = this.checked;
   }
 }
 
