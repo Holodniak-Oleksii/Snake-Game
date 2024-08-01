@@ -1,6 +1,6 @@
+import MainScene from "@/screens/main";
 import { Application, Assets } from "pixi.js";
 import manifest from "../manifest.json";
-import MainScene from "./screens/main";
 
 export const SCREEN_WIDTH = 1000;
 export const SCREEN_HEIGHT = 700;

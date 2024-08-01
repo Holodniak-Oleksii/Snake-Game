@@ -1,5 +1,5 @@
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "@/";
 import { Container } from "pixi.js";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../..";
 import Board from "./board";
 import Menu from "./menu";
 
