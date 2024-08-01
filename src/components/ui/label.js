@@ -5,18 +5,19 @@ class Label extends Container {
   constructor(title, value, bgColor = 0x9ed700) {
     super();
 
-    this.title = title;
-    this.value = value;
     this.bgColor = bgColor;
     this.labelHeight = 50;
+
+    this.titleText = new Text({ text: title });
+    this.valueText = new Text({ text: value });
 
     this.#draw();
   }
 
   #draw() {
     this.#addBackground();
-    this.#addText(this.title, 20, "left");
-    this.#addText(this.value, 20, "right");
+    this.#addText(this.titleText, 20, "left");
+    this.#addText(this.valueText, 20, "right");
   }
 
   #addBackground() {
@@ -27,14 +28,13 @@ class Label extends Container {
     this.addChild(background);
   }
 
-  #addText(text, offsetX, align = "left") {
+  #addText(textElement, offsetX, align = "left") {
     const style = new TextStyle({
       fontFamily: "Roboto",
       fontSize: 16,
-      fill: 0xffffff,
     });
 
-    const textElement = new Text({ text, style });
+    textElement.style = style;
 
     textElement.position.set(
       align === "left" ? offsetX : MENU_WIDTH - textElement.width - offsetX,
@@ -42,6 +42,9 @@ class Label extends Container {
     );
 
     this.addChild(textElement);
+  }
+  setValue(value) {
+    this.valueText.text = value;
   }
 }
 

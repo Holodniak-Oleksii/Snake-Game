@@ -14,7 +14,6 @@ class Scene extends Container {
     this.menu = new Menu();
     this.board = new Board();
 
-    this.menu.draw();
     this.board.draw();
 
     this.addChild(this.menu);

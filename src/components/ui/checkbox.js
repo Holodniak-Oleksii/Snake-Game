@@ -1,4 +1,4 @@
-import { Container, Graphics } from "pixi.js";
+import { Container, Graphics, Text, TextStyle } from "pixi.js";
 
 const svgString = `
 <svg width="24" height="20" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -7,31 +7,36 @@ const svgString = `
 `;
 
 class Checkbox extends Container {
-  constructor(checked = false) {
+  constructor(checked = false, title = "") {
     super();
     this.checked = checked;
-    this.size = 32;
+    this.size = 24;
+    this.title = title;
+
+    this.container = new Container();
+    this.addChild(this.container);
+
     this.checkMark = new Graphics().svg(svgString);
 
     this.interactive = true;
     this.buttonMode = true;
     this.cursor = "pointer";
     this.on("pointerdown", this.toggle);
-
     this.#draw();
   }
 
   #draw() {
-    this.#addContainer();
+    this.#addBackground();
     this.#addCheckMark();
+    this.#addTitle();
   }
 
-  #addContainer() {
+  #addBackground() {
     const background = new Graphics();
     background.roundRect(0, 0, this.size, this.size, 4);
     background.fill(0x3939ff);
 
-    this.addChild(background);
+    this.container.addChild(background);
   }
 
   #addCheckMark() {
@@ -41,12 +46,27 @@ class Checkbox extends Container {
     this.checkMark.x = this.size * 0.1;
     this.checkMark.visible = this.checked;
 
-    this.addChild(this.checkMark);
+    this.container.addChild(this.checkMark);
+  }
+
+  #addTitle() {
+    const style = new TextStyle({
+      fontFamily: "Roboto",
+      fontSize: 18,
+      align: "left",
+    });
+
+    this.titleText = new Text({ text: this.title, style });
+    this.titleText.x = this.size + 8; // Space between checkbox and text
+    this.titleText.y = (this.size - this.titleText.height) / 2;
+
+    this.addChild(this.titleText);
   }
 
   toggle = () => {
     this.checked = !this.checked;
     this.checkMark.visible = this.checked;
+
     if (this.changeListener) {
       this.changeListener(this.checked);
     }

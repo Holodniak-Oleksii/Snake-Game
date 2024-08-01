@@ -10,7 +10,7 @@ class Board extends Container {
   draw() {
     const mask = new Graphics()
       .rect(0, 0, BOARD_SIZE, BOARD_SIZE)
-      .fill(0x730909);
+      .fill(0x6b6b6b);
     this.addChild(mask);
   }
 }
