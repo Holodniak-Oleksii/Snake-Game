@@ -1,5 +1,5 @@
+import { BOARD_SIZE } from "@/";
 import { Container, Graphics } from "pixi.js";
-import { BOARD_SIZE } from "../../..";
 
 class Board extends Container {
   constructor() {

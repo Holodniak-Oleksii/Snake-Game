@@ -1,7 +1,7 @@
+import { GAME_MODE, MENU_WIDTH } from "@/";
+import Checkbox from "@/components/ui/checkbox";
+import User from "@/context/user";
 import { Container, Graphics } from "pixi.js";
-import { GAME_MODE, MENU_WIDTH } from "../../..";
-import User from "../../../context/user";
-import Checkbox from "../../ui/checkbox";
 
 class ModeList extends Container {
   constructor(onChange) {

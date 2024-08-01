@@ -1,8 +1,8 @@
+import { MENU_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH } from "@/";
+import Button from "@/components/ui/button";
+import Label from "@/components/ui/label";
+import User from "@/context/user";
 import { Container, Graphics, Text, TextStyle } from "pixi.js";
-import { MENU_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH } from "../../..";
-import User from "../../../context/user";
-import Button from "../../ui/button";
-import Label from "../../ui/label";
 import ModeList from "./mode-list";
 
 class Menu extends Container {

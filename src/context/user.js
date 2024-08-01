@@ -1,4 +1,4 @@
-import { GAME_MODE } from "..";
+import { GAME_MODE } from "@/";
 
 class User {
   constructor() {
