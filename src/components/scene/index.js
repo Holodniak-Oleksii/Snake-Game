@@ -8,16 +8,18 @@ class Scene extends Container {
     super();
     this.app = app;
 
-    this.height = SCREEN_WIDTH;
-    this.width = SCREEN_HEIGHT;
+    this.height = SCREEN_HEIGHT;
+    this.width = SCREEN_WIDTH;
 
     this.menu = new Menu();
     this.board = new Board();
 
-    this.board.draw();
-
     this.addChild(this.menu);
     this.addChild(this.board);
+  }
+
+  update(delta) {
+    this.board.update(delta);
   }
 }
 
