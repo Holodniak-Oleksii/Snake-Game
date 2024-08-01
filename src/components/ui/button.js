@@ -4,10 +4,13 @@ class Button extends Container {
   constructor(text, onClick, style = {}) {
     super();
 
-    this.label = new Text(text, {
-      fontSize: style.fontSize || 24,
-      fill: style.textColor || 0xffffff,
-      align: "center",
+    this.label = new Text({
+      text,
+      style: {
+        fontSize: style.fontSize || 24,
+        fill: style.textColor || 0xffffff,
+        align: "center",
+      },
     });
     this.label.anchor.set(0.5);
 
