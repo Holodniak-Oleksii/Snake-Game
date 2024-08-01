@@ -1,0 +1,14 @@
+{
+  "bundles": [
+    {
+      "name": "fonts",
+      "assets": [
+        {
+          "alias": "Roboto",
+          "src": "./src/assets/fonts/Roboto-Regular.ttf",
+          "data": { "family": "Roboto" }
+        }
+      ]
+    }
+  ]
+}
