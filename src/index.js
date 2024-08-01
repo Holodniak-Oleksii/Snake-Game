@@ -30,8 +30,8 @@ const start = async () => {
 
   const mainScreen = new MainScene(app);
 
-  app.ticker.add(() => {
-    mainScreen.update();
+  app.ticker.add((delta) => {
+    mainScreen.update(delta);
   });
 };
 
