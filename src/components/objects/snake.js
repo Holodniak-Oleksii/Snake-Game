@@ -25,7 +25,6 @@ class Snake extends Container {
   move(delta) {
     this.lastMoveTime += delta.deltaTime;
     const moveInterval = 1000 / this.speed;
-    console.log("this.lastMoveTime :", this.lastMoveTime);
 
     if (this.lastMoveTime >= moveInterval) {
       let newSegment = { ...this.body[0] };
