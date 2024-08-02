@@ -118,8 +118,8 @@ class Game {
     const gameOverText = new Text({
       text: "Game Over",
       style: {
-        fontFamily: "Roboto",
-        fontSize: 48,
+        fontFamily: "Bulgarian-Bridge",
+        fontSize: 52,
         fill: 0xffffff,
         align: "center",
       },
@@ -127,6 +127,7 @@ class Game {
     gameOverText.anchor.set(0.5);
     gameOverText.position.set(BOARD_SIZE / 2, BOARD_SIZE / 2);
     gameOverText.label = "gameObject";
+    gameOverText.zIndex = 4;
 
     this.stage.addChild(gameOverText);
 

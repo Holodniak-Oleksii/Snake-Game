@@ -1,24 +1,15 @@
-import { GAME_MODE, MENU_WIDTH } from "@/";
+import { GAME_MODE } from "@/";
 import Checkbox from "@/components/ui/checkbox";
 import User from "@/context/user";
-import { Container, Graphics } from "pixi.js";
+import { Container } from "pixi.js";
 
 class ModeList extends Container {
   constructor() {
     super();
     this.user = new User();
     this.checkboxes = [];
-    this.y = 320;
-    this.#drawBackground();
+    this.y = 310;
     this.#draw();
-  }
-
-  #drawBackground() {
-    const background = new Graphics()
-      .rect(0, -20, MENU_WIDTH, Object.values(GAME_MODE).length * 40 + 20)
-      .fill(0xddff00);
-
-    this.addChild(background);
   }
 
   #draw() {

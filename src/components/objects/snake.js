@@ -15,10 +15,12 @@ class Snake extends Container {
 
   draw() {
     this.removeChildren();
-    this.body.forEach((segment) => {
+
+    this.body.forEach((segment, index) => {
       const segmentGraphics = new Graphics()
         .rect(segment.x, segment.y, this.segmentSize, this.segmentSize)
-        .fill(0x00ff00);
+        .fill(index === 0 ? 0xb9b3a1 : 0x8b9a1c)
+        .stroke(0x000000);
       this.addChild(segmentGraphics);
     });
   }

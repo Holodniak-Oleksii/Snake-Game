@@ -1,4 +1,4 @@
-import { Container, Graphics, Text } from "pixi.js";
+import { Container, Graphics, Text, Texture } from "pixi.js";
 
 class Button extends Container {
   constructor({ text = "", onClick = () => {}, style = {} }) {
@@ -6,8 +6,11 @@ class Button extends Container {
     this.label = new Text({
       text,
       style: {
-        fontSize: style.fontSize || 24,
-        fill: style.textColor || 0xffffff,
+        fontFamily: "Bulgarian-Bridge",
+        fontSize: style.fontSize || 26,
+        fill: 0xffffff,
+        stroke: 0x000000,
+
         align: "center",
       },
     });
@@ -18,18 +21,14 @@ class Button extends Container {
     const textHeight = this.label.height;
 
     this.buttonWidth = style.width || textWidth + padding * 2;
-    this.buttonHeight = style.height || textHeight + padding * 2;
+    this.buttonHeight = style.height || textHeight + padding;
 
     this.background = new Graphics();
-    this.background.fill(style.backgroundColor || 0x3498db);
-    this.background.roundRect(
-      0,
-      0,
-      this.buttonWidth,
-      this.buttonHeight,
-      style.radius || 10
+    this.drawBackground(
+      style.backgroundColor || [0x00ff00, 0x858174],
+      style.radius || 40
     );
-    this.background.endFill();
+
     this.addChild(this.background);
 
     this.label.x = this.buttonWidth / 2;
@@ -45,12 +44,47 @@ class Button extends Container {
     this.cursor = "pointer";
     this.on("pointerdown", this.handleClick.bind(this));
   }
+
+  drawBackground(color, radius) {
+    const [startColor, endColor] = color;
+
+    const gradientTexture = this.createGradientTexture(startColor, endColor);
+
+    this.background.clear();
+    this.background.roundRect(
+      0,
+      0,
+      this.buttonWidth,
+      this.buttonHeight,
+      radius
+    );
+    this.background.fill({ texture: gradientTexture });
+  }
+
+  createGradientTexture(startColor, endColor) {
+    const canvas = document.createElement("canvas");
+    canvas.width = 100;
+    canvas.height = 100;
+    const ctx = canvas.getContext("2d");
+
+    const gradient = ctx.createLinearGradient(0, 0, 0, 100);
+    gradient.addColorStop(0, `#${startColor.toString(16).padStart(6, "0")}`);
+    gradient.addColorStop(1, `#${endColor.toString(16).padStart(6, "0")}`);
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    return Texture.from(canvas);
+  }
+
   setText(text) {
     this.label.text = text;
   }
+
   setEvent(onClick) {
     this.onClick = onClick;
   }
+
   handleClick() {
     if (this.onClick) {
       this.onClick();

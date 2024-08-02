@@ -4,9 +4,18 @@
       "name": "fonts",
       "assets": [
         {
-          "alias": "Roboto",
-          "src": "fonts/Roboto-Regular.ttf",
-          "data": { "family": "Roboto" }
+          "alias": "Bulgarian-Bridge",
+          "src": "fonts/Bulgarian-Bridge.ttf",
+          "data": { "family": "Bulgarian-Bridge" }
+        }
+      ]
+    },
+    {
+      "name": "board",
+      "assets": [
+        {
+          "alias": "grass",
+          "src": "images/grass.png"
         }
       ]
     }

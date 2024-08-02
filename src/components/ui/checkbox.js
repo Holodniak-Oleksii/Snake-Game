@@ -35,7 +35,7 @@ class Checkbox extends Container {
   #addBackground() {
     const background = new Graphics();
     background.roundRect(0, 0, this.size, this.size, 4);
-    background.fill(0x3939ff);
+    background.fill(0x8b9a1c);
 
     this.container.addChild(background);
   }
@@ -52,9 +52,12 @@ class Checkbox extends Container {
 
   #addTitle() {
     const style = new TextStyle({
-      fontFamily: "Roboto",
-      fontSize: 18,
+      fontFamily: "Bulgarian-Bridge",
+      fontSize: 20,
       align: "left",
+      fill: 0xffffff,
+      stroke: 0x000000,
+
     });
 
     this.titleText = new Text({ text: this.title, style });

@@ -46,7 +46,7 @@ class Menu extends Container {
   #draw() {
     const mask = new Graphics()
       .rect(0, 0, MENU_WIDTH, SCREEN_HEIGHT)
-      .fill(0x3fff21);
+      .fill(0x5a6102);
 
     this.addChild(mask);
     this.#drawTitle();
@@ -143,32 +143,40 @@ class Menu extends Container {
       if (orientation === "center") {
         button.x = MENU_WIDTH / 2 - this.buttonWidth / 2;
       }
-      button.y = SCREEN_HEIGHT - button.height - 20;
+      button.y = SCREEN_HEIGHT - button.height - 40;
     }
   }
 
   #drawTitle() {
     const style = new TextStyle({
-      fontFamily: "Roboto",
-      fontSize: 24,
+      fontFamily: "Bulgarian-Bridge",
+      fontSize: 42,
+      fill: 0xffffff,
+      stroke: 0x000000,
+      dropShadow: true,
     });
 
     const title = new Text({
       text: "Snake Game",
       style,
-      y: 50,
     });
 
     title.anchor.set(0.5, 0.5);
-    title.position.set(MENU_WIDTH / 2, 50);
+    title.position.set(MENU_WIDTH / 2, 40);
+
+    const background = new Graphics();
+    background.roundRect(0, 0, MENU_WIDTH, title.height + 40, 4);
+    background.fill(0x626d13);
+
+    this.addChild(background);
 
     this.addChild(title);
   }
 
   #drawUserRating() {
-    this.bestScoreLabel.y = 120;
+    this.bestScoreLabel.y = 150;
     this.lastScoreLabel.y =
-      this.bestScoreLabel.y + this.bestScoreLabel.height + 20;
+      this.bestScoreLabel.y + this.bestScoreLabel.height + 2;
     this.addChild(this.bestScoreLabel);
     this.addChild(this.lastScoreLabel);
   }

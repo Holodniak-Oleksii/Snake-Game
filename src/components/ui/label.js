@@ -2,11 +2,11 @@ import { Container, Graphics, Text, TextStyle } from "pixi.js";
 import { MENU_WIDTH } from "../..";
 
 class Label extends Container {
-  constructor(title, value, bgColor = 0x9ed700) {
+  constructor(title, value, bgColor = 0x5a6102) {
     super();
 
     this.bgColor = bgColor;
-    this.labelHeight = 50;
+    this.labelHeight = 40;
 
     this.titleText = new Text({ text: title });
     this.valueText = new Text({ text: value });
@@ -30,8 +30,10 @@ class Label extends Container {
 
   #addText(textElement, offsetX, align = "left") {
     const style = new TextStyle({
-      fontFamily: "Roboto",
-      fontSize: 16,
+      fontFamily: "Bulgarian-Bridge",
+      fontSize: 24,
+      fill: 0xffffff,
+      stroke: 0x000000,
     });
 
     textElement.style = style;
