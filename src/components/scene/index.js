@@ -1,4 +1,5 @@
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "@/";
+import Game from "@/context/game";
 import { Container } from "pixi.js";
 import Board from "./board";
 import Menu from "./menu";
@@ -11,15 +12,17 @@ class Scene extends Container {
     this.height = SCREEN_HEIGHT;
     this.width = SCREEN_WIDTH;
 
-    this.menu = new Menu();
     this.board = new Board();
+    this.game = new Game();
+    this.menu = new Menu(this.game);
 
     this.addChild(this.menu);
     this.addChild(this.board);
   }
 
   update(delta) {
-    this.board.update(delta);
+    this.game.update(delta);
+    this.menu.update();
   }
 }
 

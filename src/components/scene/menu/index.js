@@ -1,6 +1,7 @@
 import { MENU_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH } from "@/";
 import Button from "@/components/ui/button";
 import Label from "@/components/ui/label";
+import Game from "@/context/game";
 import User from "@/context/user";
 import { Container, Graphics, Text, TextStyle } from "pixi.js";
 import ModeList from "./mode-list";
@@ -10,11 +11,10 @@ class Menu extends Container {
     super();
     this.position.set(SCREEN_WIDTH - MENU_WIDTH, 0);
     this.user = new User();
-
+    this.game = new Game();
     this.bestScoreLabel = new Label("Best Score:", this.user.getBestScore());
     this.lastScoreLabel = new Label("Last Score:", this.user.getLastScore());
-    this.gameModeLabel = new Label("Mode:", this.user.getGameMode());
-
+    this.toggled = !this.game.isPlay;
     this.#draw();
   }
 
@@ -26,8 +26,6 @@ class Menu extends Container {
     this.addChild(mask);
     this.#drawTitle();
     this.#drawUserRating();
-    this.#drawModeList();
-    this.#drawButtons();
   }
 
   #drawTitle() {
@@ -52,40 +50,97 @@ class Menu extends Container {
     this.bestScoreLabel.y = 120;
     this.lastScoreLabel.y =
       this.bestScoreLabel.y + this.bestScoreLabel.height + 20;
-    this.gameModeLabel.y =
-      this.lastScoreLabel.y + this.lastScoreLabel.height + 20;
-
     this.addChild(this.bestScoreLabel);
     this.addChild(this.lastScoreLabel);
-    this.addChild(this.gameModeLabel);
   }
 
   update = () => {
-    // test example
-    this.gameModeLabel.setValue(this.user.getGameMode());
+    this.lastScoreLabel.setValue(this.user.getLastScore());
+    this.bestScoreLabel.setValue(this.user.getBestScore());
+    if (this.toggled !== this.game.isPlay) {
+      if (this.game.isPlay) {
+        this.#removeButtons();
+        this.#removeModeList();
+        this.#addMenuButton();
+      } else {
+        this.#removeMenuButton();
+        this.#drawButtons();
+        this.#drawModeList();
+      }
+      if (this.game.isPause) {
+        this.#removeModeList();
+      }
+    }
+    this.toggled = this.game.isPlay;
   };
+
+  #removeModeList() {
+    const modeList = this.getChildByLabel("modeList");
+    if (modeList) {
+      this.removeChild(modeList);
+    }
+  }
 
   #drawModeList() {
     const modeList = new ModeList(this.update);
+    modeList.label = "modeList";
     this.addChild(modeList);
   }
+
   #drawButtons() {
     const buttonSize = (MENU_WIDTH - 60) / 2;
-    const buttonPlay = new Button("Play", () => alert("Play Clicked"), {
+    this.buttonPlay = new Button("Play", () => this.game.startGame(), {
       width: buttonSize,
     });
-    const buttonExit = new Button("Exit", () => alert("Exit Clicked"), {
+    this.buttonExit = new Button("Exit", () => window.close(), {
       width: buttonSize,
     });
 
-    buttonPlay.y = SCREEN_HEIGHT - buttonPlay.height - 20;
-    buttonPlay.x = 20;
+    this.buttonPlay.y = SCREEN_HEIGHT - this.buttonPlay.height - 20;
+    this.buttonPlay.x = 20;
 
-    buttonExit.y = SCREEN_HEIGHT - buttonPlay.height - 20;
-    buttonExit.x = MENU_WIDTH - buttonExit.width - 20;
+    this.buttonExit.y = SCREEN_HEIGHT - this.buttonPlay.height - 20;
+    this.buttonExit.x = MENU_WIDTH - this.buttonExit.width - 20;
 
-    this.addChild(buttonPlay);
-    this.addChild(buttonExit);
+    this.addChild(this.buttonPlay);
+    this.addChild(this.buttonExit);
+  }
+
+  #addMenuButton() {
+    if (this.menuButton) return;
+
+    this.menuButton = new Button(
+      "Menu",
+      () => {
+        this.game.showResume();
+      },
+      {
+        width: MENU_WIDTH - 40,
+      }
+    );
+
+    this.menuButton.y = SCREEN_HEIGHT - this.menuButton.height - 20;
+    this.menuButton.x = 20;
+
+    this.addChild(this.menuButton);
+  }
+
+  #removeMenuButton() {
+    if (this.menuButton) {
+      this.removeChild(this.menuButton);
+      this.menuButton = null;
+    }
+  }
+
+  #removeButtons() {
+    if (this.buttonPlay) {
+      this.removeChild(this.buttonPlay);
+      this.buttonPlay = null;
+    }
+    if (this.buttonExit) {
+      this.removeChild(this.buttonExit);
+      this.buttonExit = null;
+    }
   }
 }
 

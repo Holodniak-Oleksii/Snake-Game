@@ -3,7 +3,6 @@ import { Container, Graphics, Text } from "pixi.js";
 class Button extends Container {
   constructor(text, onClick, style = {}) {
     super();
-
     this.label = new Text({
       text,
       style: {

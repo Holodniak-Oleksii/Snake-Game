@@ -1,20 +1,15 @@
 import { BOARD_SIZE } from "@/";
-import Apple from "@/components/objects/apple";
-import Snake from "@/components/objects/snake";
+import Game from "@/context/game";
 import { Container, Graphics } from "pixi.js";
 
 class Board extends Container {
   constructor() {
     super();
     this.position.set(0, 0);
-
-    this.snake = new Snake();
-    this.apple = new Apple();
-
     this.draw();
+    this.#bindKeys();
 
-    this.addChild(this.snake);
-    this.addChild(this.apple);
+    this.game = new Game(this);
   }
 
   draw() {
@@ -23,15 +18,26 @@ class Board extends Container {
   }
 
   update(delta) {
-    this.snake.move(delta);
-    if (this.checkCollision(this.snake.body[0], this.apple)) {
-      this.snake.grow();
-      this.apple.reposition();
-    }
+    this.game.update(delta);
   }
 
-  checkCollision(segment, apple) {
-    return segment.x === apple.position.x && segment.y === apple.position.y;
+  #bindKeys() {
+    window.addEventListener("keydown", (event) => {
+      switch (event.key) {
+        case "ArrowUp":
+          this.game.snake.setDirection("up");
+          break;
+        case "ArrowDown":
+          this.game.snake.setDirection("down");
+          break;
+        case "ArrowLeft":
+          this.game.snake.setDirection("left");
+          break;
+        case "ArrowRight":
+          this.game.snake.setDirection("right");
+          break;
+      }
+    });
   }
 }
 
