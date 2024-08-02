@@ -25,16 +25,16 @@ class Board extends Container {
     window.addEventListener("keydown", (event) => {
       switch (event.key) {
         case "ArrowUp":
-          this.game.snake.setDirection("up");
+          this.game.mode.snake.setDirection("up");
           break;
         case "ArrowDown":
-          this.game.snake.setDirection("down");
+          this.game.mode.snake.setDirection("down");
           break;
         case "ArrowLeft":
-          this.game.snake.setDirection("left");
+          this.game.mode.snake.setDirection("left");
           break;
         case "ArrowRight":
-          this.game.snake.setDirection("right");
+          this.game.mode.snake.setDirection("right");
           break;
       }
     });

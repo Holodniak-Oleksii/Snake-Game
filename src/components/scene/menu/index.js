@@ -67,24 +67,19 @@ class Menu extends Container {
         this.#drawButtons();
         this.#drawModeList();
       }
-      if (this.game.isPause) {
-        this.#removeModeList();
-      }
     }
     this.toggled = this.game.isPlay;
   };
 
   #removeModeList() {
-    const modeList = this.getChildByLabel("modeList");
-    if (modeList) {
-      this.removeChild(modeList);
+    if (this.modeList) {
+      this.removeChild(this.modeList);
     }
   }
 
   #drawModeList() {
-    const modeList = new ModeList(this.update);
-    modeList.label = "modeList";
-    this.addChild(modeList);
+    this.modeList = new ModeList(this.update);
+    this.addChild(this.modeList);
   }
 
   #drawButtons() {

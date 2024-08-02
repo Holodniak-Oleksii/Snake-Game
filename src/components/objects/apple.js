@@ -7,6 +7,10 @@ class Apple extends Container {
     this.size = 20;
 
     this.draw();
+    this.position.set(
+      Math.floor(Math.random() * (BOARD_SIZE / this.size)) * this.size,
+      Math.floor(Math.random() * (BOARD_SIZE / this.size)) * this.size
+    );
   }
 
   draw() {
@@ -30,7 +34,9 @@ class Apple extends Container {
         !snake.body.some(
           (segment) =>
             segment.x === this.position.x && segment.y === this.position.y
-        ) && !wall.checkCollision(this.position.x, this.position.y);
+        ) && wall
+          ? !wall?.checkCollision(this.position.x, this.position.y)
+          : true;
     }
   }
 }

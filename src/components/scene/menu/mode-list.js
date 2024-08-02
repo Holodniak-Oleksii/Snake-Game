@@ -10,7 +10,6 @@ class ModeList extends Container {
     this.checkboxes = [];
     this.y = 320;
     this.updateCallback = onChange;
-
     this.#drawBackground();
     this.#draw();
   }
