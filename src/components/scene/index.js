@@ -21,7 +21,7 @@ class Scene extends Container {
   }
 
   update(delta) {
-    this.game.update(delta);
+    this.board.update(delta);
     this.menu.update();
   }
 }

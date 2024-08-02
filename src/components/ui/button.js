@@ -1,7 +1,7 @@
 import { Container, Graphics, Text } from "pixi.js";
 
 class Button extends Container {
-  constructor(text, onClick, style = {}) {
+  constructor({ text = "", onClick = () => {}, style = {} }) {
     super();
     this.label = new Text({
       text,
@@ -17,22 +17,23 @@ class Button extends Container {
     const textWidth = this.label.width;
     const textHeight = this.label.height;
 
-    const buttonWidth = style.width || textWidth + padding * 2;
-    const buttonHeight = style.height || textHeight + padding * 2;
+    this.buttonWidth = style.width || textWidth + padding * 2;
+    this.buttonHeight = style.height || textHeight + padding * 2;
 
     this.background = new Graphics();
+    this.background.fill(style.backgroundColor || 0x3498db);
     this.background.roundRect(
       0,
       0,
-      buttonWidth,
-      buttonHeight,
+      this.buttonWidth,
+      this.buttonHeight,
       style.radius || 10
     );
-    this.background.fill(style.backgroundColor || 0x3498db);
+    this.background.endFill();
     this.addChild(this.background);
 
-    this.label.x = buttonWidth / 2;
-    this.label.y = buttonHeight / 2;
+    this.label.x = this.buttonWidth / 2;
+    this.label.y = this.buttonHeight / 2;
     this.addChild(this.label);
 
     this.x = style.x || 0;
@@ -44,7 +45,12 @@ class Button extends Container {
     this.cursor = "pointer";
     this.on("pointerdown", this.handleClick.bind(this));
   }
-
+  setText(text) {
+    this.label.text = text;
+  }
+  setEvent(onClick) {
+    this.onClick = onClick;
+  }
   handleClick() {
     if (this.onClick) {
       this.onClick();

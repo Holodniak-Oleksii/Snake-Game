@@ -1,9 +1,9 @@
 import { MENU_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH } from "@/";
-import Button from "@/components/ui/button";
 import Label from "@/components/ui/label";
 import Game from "@/context/game";
 import User from "@/context/user";
 import { Container, Graphics, Text, TextStyle } from "pixi.js";
+import Button from "../../ui/button";
 import ModeList from "./mode-list";
 
 class Menu extends Container {
@@ -12,11 +12,36 @@ class Menu extends Container {
     this.position.set(SCREEN_WIDTH - MENU_WIDTH, 0);
     this.user = new User();
     this.game = new Game();
+
+    this.isPause = false;
+
     this.bestScoreLabel = new Label("Best Score:", this.user.getBestScore());
     this.lastScoreLabel = new Label("Last Score:", this.user.getLastScore());
-    this.toggled = !this.game.isPlay;
+    this.buttonWidth = (MENU_WIDTH - 60) / 2;
+
+    this.buttonLeft = new Button({
+      style: {
+        width: this.buttonWidth,
+      },
+    });
+
+    this.buttonRight = new Button({
+      style: {
+        width: this.buttonWidth,
+      },
+    });
+
     this.#draw();
   }
+
+  update = () => {
+    this.lastScoreLabel.setValue(this.user.getLastScore());
+    this.bestScoreLabel.setValue(this.user.getBestScore());
+    if (this.game.isGameOver) {
+      this.#setInitialState();
+      this.isPause = false;
+    }
+  };
 
   #draw() {
     const mask = new Graphics()
@@ -26,6 +51,100 @@ class Menu extends Container {
     this.addChild(mask);
     this.#drawTitle();
     this.#drawUserRating();
+    this.#setInitialState();
+  }
+
+  #startGame() {
+    this.game.startGame();
+    this.isPause = false;
+    this.#setInGameMenuState();
+  }
+
+  #setInitialState() {
+    this.#updateButtonSettings(
+      this.buttonLeft,
+      "Play",
+      () => {
+        this.#startGame();
+      },
+      "center"
+    );
+    this.#removeModeList();
+    this.removeChild(this.buttonRight);
+    this.addChild(this.buttonLeft);
+    this.#drawModeList();
+  }
+
+  #setInGameMenuState() {
+    this.#updateButtonSettings(
+      this.buttonLeft,
+      "Menu",
+      () => this.#setMenuState(),
+      "left"
+    );
+    this.#updateButtonSettings(
+      this.buttonRight,
+      this.isPause ? "Resume" : "Pause",
+      () => this.#handlerPauseToggle(),
+      "right"
+    );
+    this.addChild(this.buttonLeft);
+    this.addChild(this.buttonRight);
+    this.#removeModeList();
+  }
+
+  #setMenuState() {
+    this.#updateButtonSettings(
+      this.buttonLeft,
+      "Play",
+      () => {
+        this.#startGame();
+      },
+      "left"
+    );
+    this.#updateButtonSettings(
+      this.buttonRight,
+      "Exit",
+      () => this.#setInGameMenuState(),
+      "right"
+    );
+    this.#drawModeList();
+  }
+
+  #handlerPauseToggle() {
+    this.isPause = !this.isPause;
+    if (this.isPause) {
+      this.game.pause();
+    } else {
+      this.game.resume();
+    }
+    this.#updateButtonSettings(
+      this.buttonRight,
+      this.isPause ? "Resume" : "Pause",
+      () => this.#handlerPauseToggle(),
+      "right"
+    );
+  }
+
+  #updateButtonSettings(button, title, onClick, orientation) {
+    if (title) {
+      button.setText(title);
+    }
+    if (onClick) {
+      button.setEvent(onClick);
+    }
+    if (orientation) {
+      if (orientation === "left") {
+        button.x = 20;
+      }
+      if (orientation === "right") {
+        button.x = MENU_WIDTH - this.buttonWidth - 20;
+      }
+      if (orientation === "center") {
+        button.x = MENU_WIDTH / 2 - this.buttonWidth / 2;
+      }
+      button.y = SCREEN_HEIGHT - button.height - 20;
+    }
   }
 
   #drawTitle() {
@@ -54,94 +173,14 @@ class Menu extends Container {
     this.addChild(this.lastScoreLabel);
   }
 
-  update = () => {
-    this.lastScoreLabel.setValue(this.user.getLastScore());
-    this.bestScoreLabel.setValue(this.user.getBestScore());
-    if (this.toggled !== this.game.isPlay) {
-      if (this.game.isPlay) {
-        this.#removeButtons();
-        this.#removeModeList();
-        this.#addMenuButton();
-      } else {
-        this.#removeMenuButton();
-        this.#drawButtons();
-        this.#drawModeList();
-      }
-    }
-    this.toggled = this.game.isPlay;
-  };
-
-  #removeModeList() {
-    if (this.modeList) {
-      this.removeChild(this.modeList);
-    }
-  }
-
   #drawModeList() {
     this.modeList = new ModeList();
     this.addChild(this.modeList);
   }
 
-  #drawButtons() {
-    const buttonSize = (MENU_WIDTH - 60) / 2;
-    this.buttonPlay = new Button("Play", () => this.game.startGame(), {
-      width: buttonSize,
-    });
-    this.buttonExit = new Button(
-      "Exit",
-      () => {
-        this.game.exit();
-        this.modeList.updateCheckboxes(this.user.getGameMode());
-      },
-      {
-        width: buttonSize,
-      }
-    );
-
-    this.buttonPlay.y = SCREEN_HEIGHT - this.buttonPlay.height - 20;
-    this.buttonPlay.x = 20;
-
-    this.buttonExit.y = SCREEN_HEIGHT - this.buttonPlay.height - 20;
-    this.buttonExit.x = MENU_WIDTH - this.buttonExit.width - 20;
-
-    this.addChild(this.buttonPlay);
-    this.addChild(this.buttonExit);
-  }
-
-  #addMenuButton() {
-    if (this.menuButton) return;
-
-    this.menuButton = new Button(
-      "Menu",
-      () => {
-        this.game.showResume();
-      },
-      {
-        width: MENU_WIDTH - 40,
-      }
-    );
-
-    this.menuButton.y = SCREEN_HEIGHT - this.menuButton.height - 20;
-    this.menuButton.x = 20;
-
-    this.addChild(this.menuButton);
-  }
-
-  #removeMenuButton() {
-    if (this.menuButton) {
-      this.removeChild(this.menuButton);
-      this.menuButton = null;
-    }
-  }
-
-  #removeButtons() {
-    if (this.buttonPlay) {
-      this.removeChild(this.buttonPlay);
-      this.buttonPlay = null;
-    }
-    if (this.buttonExit) {
-      this.removeChild(this.buttonExit);
-      this.buttonExit = null;
+  #removeModeList() {
+    if (this.modeList) {
+      this.removeChild(this.modeList);
     }
   }
 }
