@@ -1,5 +1,5 @@
 import { GAME_MODE } from "@/";
-import Checkbox from "@/components/ui/checkbox";
+import Checkbox from "@/UI/Checkbox";
 import User from "@/context/user";
 import { Container } from "pixi.js";
 

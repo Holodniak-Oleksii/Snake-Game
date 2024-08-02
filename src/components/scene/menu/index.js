@@ -1,9 +1,9 @@
 import { MENU_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH } from "@/";
-import Label from "@/components/ui/label";
 import Game from "@/context/game";
 import User from "@/context/user";
+import Button from "@/UI/Button";
+import Label from "@/UI/Label";
 import { Container, Graphics, Text, TextStyle } from "pixi.js";
-import Button from "../../ui/button";
 import ModeList from "./mode-list";
 
 class Menu extends Container {

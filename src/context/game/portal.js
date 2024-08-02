@@ -1,6 +1,6 @@
 import Portal from "@/Entity/Portal";
 import Snake from "@/Entity/Snake";
-import { checkCollision } from "@/utils/helpers";
+import { checkCollision } from "@/Utils/helpers";
 import ClassicMode from "./classic";
 
 class PortalMode extends ClassicMode {
