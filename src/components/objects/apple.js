@@ -2,10 +2,9 @@ import { BOARD_SIZE } from "@/";
 import { Container, Graphics } from "pixi.js";
 
 class Apple extends Container {
-  constructor(snake) {
+  constructor() {
     super();
     this.size = 20;
-    this.reposition(snake);
 
     this.draw();
   }
@@ -18,7 +17,7 @@ class Apple extends Container {
     this.addChild(appleGraphics);
   }
 
-  reposition(snake) {
+  reposition(snake, wall) {
     let validPosition = false;
 
     while (!validPosition) {
@@ -27,10 +26,11 @@ class Apple extends Container {
         Math.floor(Math.random() * (BOARD_SIZE / this.size)) * this.size
       );
 
-      validPosition = !snake.body.some(
-        (segment) =>
-          segment.x === this.position.x && segment.y === this.position.y
-      );
+      validPosition =
+        !snake.body.some(
+          (segment) =>
+            segment.x === this.position.x && segment.y === this.position.y
+        ) && !wall.checkCollision(this.position.x, this.position.y);
     }
   }
 }

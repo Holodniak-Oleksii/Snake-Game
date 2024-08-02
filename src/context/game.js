@@ -1,6 +1,7 @@
 import { BOARD_SIZE, GAME_MODE } from "@/";
 import Apple from "@/components/objects/apple";
 import Snake from "@/components/objects/snake";
+import Wall from "@/components/objects/wall";
 import Button from "@/components/ui/button";
 import User from "@/context/user";
 import { Graphics, Text } from "pixi.js";
@@ -13,8 +14,11 @@ class Game {
 
     this.stage = stage;
     this.snake = new Snake();
-    this.apple = new Apple(this.snake);
+    this.wall = new Wall();
+    this.apple = new Apple();
     this.user = new User();
+    this.apple.reposition(this.snake, this.wall);
+
     this.isGameOver = false;
     this.isPlay = false;
 
@@ -34,6 +38,10 @@ class Game {
     if (gameMode === GAME_MODE.NO_DIE) {
       this.noDieGame(delta);
     }
+
+    if (gameMode === GAME_MODE.WALLS) {
+      this.wallsGame(delta);
+    }
   }
 
   noDieGame(delta) {
@@ -41,7 +49,7 @@ class Game {
     if (this.checkCollision(this.snake.body[0], this.apple)) {
       this.snake.grow();
       this.gameScore += 1;
-      this.apple.reposition(this.snake);
+      this.apple.reposition(this.snake, this.wall);
     }
     this.handleWallPass();
   }
@@ -60,12 +68,52 @@ class Game {
     }
   }
 
+  wallsGame(delta) {
+    this.snake.move(delta);
+    if (this.checkCollision(this.snake.body[0], this.apple)) {
+      this.snake.grow();
+      this.gameScore += 1;
+      this.apple.reposition(this.snake, this.wall);
+      this.addRandomWall();
+    }
+    if (
+      this.checkWallCollision() ||
+      this.checkSelfCollision() ||
+      this.checkCustomWallCollision()
+    ) {
+      this.gameOver();
+    }
+  }
+
+  addRandomWall() {
+    let x, y;
+    do {
+      x =
+        Math.floor(Math.random() * (BOARD_SIZE / this.snake.segmentSize)) *
+        this.snake.segmentSize;
+      y =
+        Math.floor(Math.random() * (BOARD_SIZE / this.snake.segmentSize)) *
+        this.snake.segmentSize;
+    } while (
+      this.snake.body.some((segment) => segment.x === x && segment.y === y) ||
+      (this.apple.position.x === x && this.apple.position.y === y) ||
+      this.wall.checkCollision(x, y)
+    );
+
+    this.wall.addCell(x, y);
+  }
+
+  checkCustomWallCollision() {
+    const head = this.snake.body[0];
+    return this.wall.checkCollision(head.x, head.y);
+  }
+
   classicGame(delta) {
     this.snake.move(delta);
     if (this.checkCollision(this.snake.body[0], this.apple)) {
       this.snake.grow();
       this.gameScore += 1;
-      this.apple.reposition(this.snake);
+      this.apple.reposition(this.snake, this.wall);
     }
     if (this.checkWallCollision() || this.checkSelfCollision()) {
       this.gameOver();
@@ -113,13 +161,16 @@ class Game {
     this.clearObject("modalObject");
 
     this.snake = new Snake();
+    this.wall = new Wall();
     this.apple = new Apple(this.snake);
 
+    this.wall.label = "gameObject";
     this.snake.label = "gameObject";
     this.apple.label = "gameObject";
 
     this.stage.addChild(this.snake);
     this.stage.addChild(this.apple);
+    this.stage.addChild(this.wall);
 
     this.isPlay = true;
     this.isGameOver = false;
