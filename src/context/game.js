@@ -31,6 +31,33 @@ class Game {
     if (gameMode === GAME_MODE.CLASSIC) {
       this.classicGame(delta);
     }
+    if (gameMode === GAME_MODE.NO_DIE) {
+      this.noDieGame(delta);
+    }
+  }
+
+  noDieGame(delta) {
+    this.snake.move(delta);
+    if (this.checkCollision(this.snake.body[0], this.apple)) {
+      this.snake.grow();
+      this.gameScore += 1;
+      this.apple.reposition(this.snake);
+    }
+    this.handleWallPass();
+  }
+
+  handleWallPass() {
+    const head = this.snake.body[0];
+    if (head.x < 0) {
+      head.x = BOARD_SIZE - this.snake.segmentSize;
+    } else if (head.x >= BOARD_SIZE) {
+      head.x = 0;
+    }
+    if (head.y < 0) {
+      head.y = BOARD_SIZE - this.snake.segmentSize;
+    } else if (head.y >= BOARD_SIZE) {
+      head.y = 0;
+    }
   }
 
   classicGame(delta) {
@@ -38,7 +65,7 @@ class Game {
     if (this.checkCollision(this.snake.body[0], this.apple)) {
       this.snake.grow();
       this.gameScore += 1;
-      this.apple.reposition(this.snake); // Pass the snake to ensure valid position
+      this.apple.reposition(this.snake);
     }
     if (this.checkWallCollision() || this.checkSelfCollision()) {
       this.gameOver();
@@ -71,6 +98,7 @@ class Game {
     if (this.gameScore > this.user.bestScore) {
       this.user.setBestScore(this.gameScore);
     }
+    this.gameScore = 0;
   }
 
   clearObject(label) {
@@ -80,22 +108,21 @@ class Game {
   }
 
   startGame() {
-    if (!this.isPlay) {
-      this.clearObject("gameObject");
-      this.clearObject("modalObject");
+    this.updateUserScore();
+    this.clearObject("gameObject");
+    this.clearObject("modalObject");
 
-      this.snake = new Snake();
-      this.apple = new Apple(this.snake);
+    this.snake = new Snake();
+    this.apple = new Apple(this.snake);
 
-      this.snake.label = "gameObject";
-      this.apple.label = "gameObject";
+    this.snake.label = "gameObject";
+    this.apple.label = "gameObject";
 
-      this.stage.addChild(this.snake);
-      this.stage.addChild(this.apple);
+    this.stage.addChild(this.snake);
+    this.stage.addChild(this.apple);
 
-      this.isPlay = true;
-      this.isGameOver = false;
-    }
+    this.isPlay = true;
+    this.isGameOver = false;
   }
 
   showResume() {
@@ -150,7 +177,6 @@ class Game {
     this.stage.addChild(gameOverText);
 
     this.updateUserScore();
-    this.gameScore = 0;
   }
 }
 
