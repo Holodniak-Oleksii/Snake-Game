@@ -17,9 +17,8 @@ class Snake extends Container {
     this.removeChildren();
     this.body.forEach((segment) => {
       const segmentGraphics = new Graphics()
-        .beginFill(0x00ff00)
-        .drawRect(segment.x, segment.y, this.segmentSize, this.segmentSize)
-        .endFill();
+        .rect(segment.x, segment.y, this.segmentSize, this.segmentSize)
+        .fill(0x00ff00);
       this.addChild(segmentGraphics);
     });
   }
