@@ -1,6 +1,5 @@
 import { BOARD_SIZE, GAME_MODE } from "@/";
 import Snake from "@/components/objects/snake";
-import Button from "@/components/ui/button";
 import User from "@/context/user";
 import { Graphics, Text } from "pixi.js";
 import ClassicMode from "./classic";
@@ -31,7 +30,6 @@ class Game {
 
   update(delta) {
     if (this.isGameOver || !this.isPlay) return;
-
     this.mode.run(delta);
   }
 
@@ -83,34 +81,25 @@ class Game {
     this.isPlay = false;
     this.isGameOver = false;
 
-    this.user.setGameMode(GAME_MODE.CLASSIC);
-
     this.clearObject("gameObject");
     this.clearObject("modalObject");
   }
 
-  showResume() {
+  pause() {
     this.isPlay = false;
 
     const overlay = new Graphics();
     overlay.rect(0, 0, BOARD_SIZE, BOARD_SIZE);
     overlay.fill({ color: 0x000000, alpha: 0.4 });
+    overlay.zIndex = 3;
     overlay.label = "modalObject";
 
     this.stage.addChild(overlay);
+  }
 
-    this.resumeButton = new Button("Resume", () => {
-      this.isPlay = true;
-      this.clearObject("modalObject");
-    });
-
-    this.resumeButton.position.set(
-      BOARD_SIZE / 2 - this.resumeButton.width / 2,
-      BOARD_SIZE / 2 - this.resumeButton.height / 2
-    );
-    this.resumeButton.label = "modalObject";
-
-    this.stage.addChild(this.resumeButton);
+  resume() {
+    this.isPlay = true;
+    this.clearObject("modalObject");
   }
 
   gameOver() {
@@ -121,6 +110,7 @@ class Game {
     const overlay = new Graphics();
     overlay.rect(0, 0, BOARD_SIZE, BOARD_SIZE);
     overlay.fill({ color: 0x000000, alpha: 0.4 });
+    overlay.zIndex = 3;
     overlay.label = "gameObject";
 
     this.stage.addChild(overlay);
