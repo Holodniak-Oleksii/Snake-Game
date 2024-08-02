@@ -1,6 +1,6 @@
 import { BOARD_SIZE } from "@/";
 import Game from "@/context/game";
-import { Container, Graphics, Text } from "pixi.js";
+import { Assets, Container, Graphics, Sprite, Text } from "pixi.js";
 
 class Board extends Container {
   constructor() {
@@ -17,7 +17,7 @@ class Board extends Container {
     this.scoreText = new Text({
       text: this.gameScore,
       style: {
-        fontFamily: "Roboto",
+        fontFamily: "Bulgarian-Bridge",
         fontSize: 16,
         fill: 0xffffff,
         align: "center",
@@ -32,8 +32,30 @@ class Board extends Container {
   }
 
   draw() {
-    const mask = new Graphics().rect(0, 0, BOARD_SIZE, BOARD_SIZE).fill(0x6b6b);
-    this.addChild(mask);
+    Assets.loadBundle("board")
+      .then((texture) => {
+        const grass = Sprite.from(texture.grass);
+
+        const scaleX = BOARD_SIZE / grass.texture.width;
+        const scaleY = BOARD_SIZE / grass.texture.height;
+
+        const scale = Math.min(scaleX, scaleY);
+
+        grass.scale.set(scale);
+
+        grass.position.set(
+          (BOARD_SIZE - grass.width) / 2,
+          (BOARD_SIZE - grass.height) / 2
+        );
+
+        this.addChild(grass);
+      })
+      .catch(() => {
+        const mask = new Graphics()
+          .rect(0, 0, BOARD_SIZE, BOARD_SIZE)
+          .fill(0x6b6b);
+        this.addChild(mask);
+      });
   }
 
   update(delta) {
@@ -68,7 +90,7 @@ class Board extends Container {
     const height = this.scoreText.height + padding * 2;
 
     this.scoreBackground.clear();
-    this.scoreBackground.rect(0, 0, width, height);
+    this.scoreBackground.roundRect(0, 0, width, height, 10);
     this.scoreBackground.fill({ color: 0x000000, alpha: 0.5 });
 
     this.scoreText.position.set(padding, padding);

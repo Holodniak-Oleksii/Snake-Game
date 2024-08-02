@@ -16,8 +16,9 @@ class Apple extends Container {
   draw() {
     this.removeChildren();
     const appleGraphics = new Graphics();
-    appleGraphics.rect(0, 0, this.size, this.size);
+    appleGraphics.roundRect(0, 0, this.size, this.size, 20);
     appleGraphics.fill(0xff0000);
+    appleGraphics.stroke(0x000000);
     this.addChild(appleGraphics);
   }
 
