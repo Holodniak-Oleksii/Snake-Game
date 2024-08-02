@@ -5,6 +5,7 @@ import User from "@/context/user";
 import { Graphics, Text } from "pixi.js";
 import ClassicMode from "./classic";
 import NoDieMode from "./no-die";
+import PortalMode from "./portal";
 import SpeedMode from "./speed";
 import WallsMode from "./walls";
 
@@ -68,10 +69,24 @@ class Game {
     if (gameMode === GAME_MODE.SPEED) {
       this.mode = new SpeedMode(this);
     }
+
+    if (gameMode === GAME_MODE.PORTAL) {
+      this.mode = new PortalMode(this);
+    }
     this.mode.start();
 
     this.isPlay = true;
     this.isGameOver = false;
+  }
+
+  exit() {
+    this.isPlay = false;
+    this.isGameOver = false;
+
+    this.user.setGameMode(GAME_MODE.CLASSIC);
+
+    this.clearObject("gameObject");
+    this.clearObject("modalObject");
   }
 
   showResume() {
