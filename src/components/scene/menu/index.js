@@ -78,7 +78,7 @@ class Menu extends Container {
   }
 
   #drawModeList() {
-    this.modeList = new ModeList(this.update);
+    this.modeList = new ModeList();
     this.addChild(this.modeList);
   }
 
@@ -87,9 +87,16 @@ class Menu extends Container {
     this.buttonPlay = new Button("Play", () => this.game.startGame(), {
       width: buttonSize,
     });
-    this.buttonExit = new Button("Exit", () => window.close(), {
-      width: buttonSize,
-    });
+    this.buttonExit = new Button(
+      "Exit",
+      () => {
+        this.game.exit();
+        this.modeList.updateCheckboxes(this.user.getGameMode());
+      },
+      {
+        width: buttonSize,
+      }
+    );
 
     this.buttonPlay.y = SCREEN_HEIGHT - this.buttonPlay.height - 20;
     this.buttonPlay.x = 20;

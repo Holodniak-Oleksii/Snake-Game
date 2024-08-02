@@ -4,12 +4,11 @@ import User from "@/context/user";
 import { Container, Graphics } from "pixi.js";
 
 class ModeList extends Container {
-  constructor(onChange) {
+  constructor() {
     super();
     this.user = new User();
     this.checkboxes = [];
     this.y = 320;
-    this.updateCallback = onChange;
     this.#drawBackground();
     this.#draw();
   }
@@ -41,15 +40,13 @@ class ModeList extends Container {
     }
 
     this.user.setGameMode(selectedMode);
-    this.#updateCheckboxes(selectedMode);
+    this.updateCheckboxes(selectedMode);
   };
 
-  #updateCheckboxes(selectedMode) {
+  updateCheckboxes(selectedMode) {
     this.checkboxes.forEach((checkbox) => {
       checkbox.setChecked(checkbox.title === selectedMode);
     });
-
-    this.updateCallback();
   }
 }
 
