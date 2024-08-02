@@ -1,4 +1,4 @@
-import Apple from "./apple";
+import Apple from "./Apple";
 
 class Portal {
   constructor(snake) {

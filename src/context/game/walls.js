@@ -1,7 +1,7 @@
 import { BOARD_SIZE } from "@/";
-import Apple from "@/components/objects/apple";
-import Snake from "@/components/objects/snake";
-import Wall from "@/components/objects/wall";
+import Apple from "@/Entity/Apple";
+import Snake from "@/Entity/Snake";
+import Wall from "@/Entity/Wall";
 import { checkCollision } from "@/utils/helpers";
 import ClassicMode from "./classic";
 

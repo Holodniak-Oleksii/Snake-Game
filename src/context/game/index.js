@@ -1,5 +1,5 @@
 import { BOARD_SIZE, GAME_MODE } from "@/";
-import Snake from "@/components/objects/snake";
+import Snake from "@/Entity/Snake";
 import User from "@/context/user";
 import { Graphics, Text } from "pixi.js";
 import ClassicMode from "./classic";

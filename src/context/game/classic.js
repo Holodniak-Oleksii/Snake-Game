@@ -1,6 +1,6 @@
 import { BOARD_SIZE } from "@/";
-import Apple from "@/components/objects/apple";
-import Snake from "@/components/objects/snake";
+import Apple from "@/Entity/Apple";
+import Snake from "@/Entity/Snake";
 import { checkCollision } from "@/utils/helpers";
 import GameMode from "./mode-abstract";
 

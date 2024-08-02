@@ -1,5 +1,5 @@
-import Portal from "@/components/objects/portal";
-import Snake from "@/components/objects/snake";
+import Portal from "@/Entity/Portal";
+import Snake from "@/Entity/Snake";
 import { checkCollision } from "@/utils/helpers";
 import ClassicMode from "./classic";
 
