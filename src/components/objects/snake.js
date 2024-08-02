@@ -5,9 +5,10 @@ class Snake extends Container {
     super();
     this.segmentSize = 20;
     this.direction = "right";
-    this.body = [{ x: 10, y: 10 }];
+    this.body = [{ x: 0, y: 0 }];
     this.speed = 100;
     this.lastMoveTime = 0;
+    this.growing = false;
 
     this.draw();
   }
@@ -16,8 +17,9 @@ class Snake extends Container {
     this.removeChildren();
     this.body.forEach((segment) => {
       const segmentGraphics = new Graphics()
-        .rect(segment.x, segment.y, this.segmentSize, this.segmentSize)
-        .fill(0x00ff00);
+        .beginFill(0x00ff00)
+        .drawRect(segment.x, segment.y, this.segmentSize, this.segmentSize)
+        .endFill();
       this.addChild(segmentGraphics);
     });
   }
@@ -43,17 +45,21 @@ class Snake extends Container {
           break;
       }
 
-      this.body.pop();
       this.body.unshift(newSegment);
-      this.draw();
 
+      if (!this.growing) {
+        this.body.pop();
+      } else {
+        this.growing = false;
+      }
+
+      this.draw();
       this.lastMoveTime = 0;
     }
   }
 
   grow() {
-    const lastSegment = this.body[this.body.length - 1];
-    this.body.push({ ...lastSegment });
+    this.growing = true;
   }
 
   setDirection(newDirection) {
