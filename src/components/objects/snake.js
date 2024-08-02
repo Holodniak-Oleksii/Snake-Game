@@ -73,6 +73,19 @@ class Snake extends Container {
       this.direction = newDirection;
     }
   }
+
+  teleport(x, y) {
+    const head = this.body[0];
+    const dx = x - head.x;
+    const dy = y - head.y;
+
+    this.body = this.body.map((segment) => ({
+      x: segment.x + dx,
+      y: segment.y + dy,
+    }));
+
+    this.draw();
+  }
 }
 
 export default Snake;

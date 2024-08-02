@@ -1,9 +1,12 @@
 import { BOARD_SIZE, GAME_MODE } from "@/";
-import Apple from "@/components/objects/apple";
 import Snake from "@/components/objects/snake";
 import Button from "@/components/ui/button";
 import User from "@/context/user";
 import { Graphics, Text } from "pixi.js";
+import ClassicMode from "./classic";
+import NoDieMode from "./no-die";
+import SpeedMode from "./speed";
+import WallsMode from "./walls";
 
 class Game {
   constructor(stage) {
@@ -12,13 +15,14 @@ class Game {
     }
 
     this.stage = stage;
-    this.snake = new Snake();
-    this.apple = new Apple(this.snake);
-    this.user = new User();
+    this.gameScore = 0;
     this.isGameOver = false;
     this.isPlay = false;
 
-    this.gameScore = 0;
+    this.user = new User();
+    this.snake = new Snake();
+
+    this.mode = new ClassicMode(this);
 
     Game.instance = this;
     return this;
@@ -27,43 +31,7 @@ class Game {
   update(delta) {
     if (this.isGameOver || !this.isPlay) return;
 
-    const gameMode = this.user.getGameMode();
-    if (gameMode === GAME_MODE.CLASSIC) {
-      this.classicGame(delta);
-    }
-  }
-
-  classicGame(delta) {
-    this.snake.move(delta);
-    if (this.checkCollision(this.snake.body[0], this.apple)) {
-      this.snake.grow();
-      this.gameScore += 1;
-      this.apple.reposition(this.snake); // Pass the snake to ensure valid position
-    }
-    if (this.checkWallCollision() || this.checkSelfCollision()) {
-      this.gameOver();
-    }
-  }
-
-  checkCollision(segment, apple) {
-    return segment.x === apple.position.x && segment.y === apple.position.y;
-  }
-
-  checkWallCollision() {
-    const head = this.snake.body[0];
-    return (
-      head.x < 0 ||
-      head.x > BOARD_SIZE - this.snake.segmentSize ||
-      head.y < 0 ||
-      head.y > BOARD_SIZE - this.snake.segmentSize
-    );
-  }
-
-  checkSelfCollision() {
-    const head = this.snake.body[0];
-    return this.snake.body
-      .slice(1)
-      .some((segment) => segment.x === head.x && segment.y === head.y);
+    this.mode.run(delta);
   }
 
   updateUserScore() {
@@ -71,6 +39,7 @@ class Game {
     if (this.gameScore > this.user.bestScore) {
       this.user.setBestScore(this.gameScore);
     }
+    this.gameScore = 0;
   }
 
   clearObject(label) {
@@ -80,22 +49,29 @@ class Game {
   }
 
   startGame() {
-    if (!this.isPlay) {
-      this.clearObject("gameObject");
-      this.clearObject("modalObject");
+    this.updateUserScore();
+    this.clearObject("gameObject");
+    this.clearObject("modalObject");
 
-      this.snake = new Snake();
-      this.apple = new Apple(this.snake);
+    const gameMode = this.user.getGameMode();
 
-      this.snake.label = "gameObject";
-      this.apple.label = "gameObject";
-
-      this.stage.addChild(this.snake);
-      this.stage.addChild(this.apple);
-
-      this.isPlay = true;
-      this.isGameOver = false;
+    if (gameMode === GAME_MODE.CLASSIC) {
+      this.mode = new ClassicMode(this);
     }
+    if (gameMode === GAME_MODE.NO_DIE) {
+      this.mode = new NoDieMode(this);
+    }
+    if (gameMode === GAME_MODE.WALLS) {
+      this.mode = new WallsMode(this);
+    }
+
+    if (gameMode === GAME_MODE.SPEED) {
+      this.mode = new SpeedMode(this);
+    }
+    this.mode.start();
+
+    this.isPlay = true;
+    this.isGameOver = false;
   }
 
   showResume() {
@@ -150,7 +126,6 @@ class Game {
     this.stage.addChild(gameOverText);
 
     this.updateUserScore();
-    this.gameScore = 0;
   }
 }
 
