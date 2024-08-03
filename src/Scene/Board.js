@@ -1,5 +1,5 @@
 import { BOARD_SIZE } from "@/";
-import Game from "@/context/game";
+import Game from "@/App/Game";
 import { Assets, Container, Graphics, Sprite, Text } from "pixi.js";
 
 class Board extends Container {

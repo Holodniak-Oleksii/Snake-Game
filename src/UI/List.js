@@ -1,9 +1,9 @@
 import { GAME_MODE } from "@/";
-import Checkbox from "@/components/ui/checkbox";
-import User from "@/context/user";
+import User from "@/App/User";
+import Checkbox from "@/UI/Checkbox";
 import { Container } from "pixi.js";
 
-class ModeList extends Container {
+class List extends Container {
   constructor() {
     super();
     this.user = new User();
@@ -41,4 +41,4 @@ class ModeList extends Container {
   }
 }
 
-export default ModeList;
+export default List;

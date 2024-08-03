@@ -1,5 +1,5 @@
+import { MENU_WIDTH } from "@/";
 import { Container, Graphics, Text, TextStyle } from "pixi.js";
-import { MENU_WIDTH } from "../..";
 
 class Label extends Container {
   constructor(title, value, bgColor = 0x5a6102) {

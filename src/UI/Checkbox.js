@@ -1,7 +1,7 @@
 import { Container, Graphics, Text, TextStyle } from "pixi.js";
 
 const svgString = `
-<svg width="24" height="20" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="24" height="20" viewBox="0 0 24 20" fill="none"">
 <path d="M10.8002 1.40002L3.64068 8.60002L1.2002 6.14574" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 `;
@@ -57,11 +57,10 @@ class Checkbox extends Container {
       align: "left",
       fill: 0xffffff,
       stroke: 0x000000,
-
     });
 
     this.titleText = new Text({ text: this.title, style });
-    this.titleText.x = this.size + 8; // Space between checkbox and text
+    this.titleText.x = this.size + 8;
     this.titleText.y = (this.size - this.titleText.height) / 2;
 
     this.addChild(this.titleText);

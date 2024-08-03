@@ -1,12 +1,12 @@
 import { BOARD_SIZE, GAME_MODE } from "@/";
-import Snake from "@/components/objects/snake";
-import User from "@/context/user";
+import Snake from "@/Entity/Snake";
 import { Graphics, Text } from "pixi.js";
-import ClassicMode from "./classic";
-import NoDieMode from "./no-die";
-import PortalMode from "./portal";
-import SpeedMode from "./speed";
-import WallsMode from "./walls";
+import ClassicMode from "./Mode/Classic";
+import NoDieMode from "./Mode/NoDie";
+import PortalMode from "./Mode/Portal";
+import SpeedMode from "./Mode/Speed";
+import WallsMode from "./Mode/Walls";
+import User from "./User";
 
 class Game {
   constructor(stage) {
@@ -33,7 +33,7 @@ class Game {
     this.mode.run(delta);
   }
 
-  updateUserScore() {
+  #updateUserScore() {
     this.user.setLastScore(this.gameScore);
     if (this.gameScore > this.user.bestScore) {
       this.user.setBestScore(this.gameScore);
@@ -48,31 +48,33 @@ class Game {
   }
 
   startGame() {
-    this.updateUserScore();
+    this.#updateUserScore();
     this.clearObject("gameObject");
     this.clearObject("modalObject");
 
     const gameMode = this.user.getGameMode();
 
-    if (gameMode === GAME_MODE.CLASSIC) {
-      this.mode = new ClassicMode(this);
-    }
-    if (gameMode === GAME_MODE.NO_DIE) {
-      this.mode = new NoDieMode(this);
-    }
-    if (gameMode === GAME_MODE.WALLS) {
-      this.mode = new WallsMode(this);
+    switch (gameMode) {
+      case GAME_MODE.CLASSIC:
+        this.mode = new ClassicMode(this);
+        break;
+      case GAME_MODE.NO_DIE:
+        this.mode = new NoDieMode(this);
+        break;
+      case GAME_MODE.WALLS:
+        this.mode = new WallsMode(this);
+        break;
+      case GAME_MODE.SPEED:
+        this.mode = new SpeedMode(this);
+        break;
+      case GAME_MODE.PORTAL:
+        this.mode = new PortalMode(this);
+        break;
+      default:
+        this.mode = new ClassicMode(this);
     }
 
-    if (gameMode === GAME_MODE.SPEED) {
-      this.mode = new SpeedMode(this);
-    }
-
-    if (gameMode === GAME_MODE.PORTAL) {
-      this.mode = new PortalMode(this);
-    }
     this.mode.start();
-
     this.isPlay = true;
     this.isGameOver = false;
   }
@@ -88,12 +90,7 @@ class Game {
   pause() {
     this.isPlay = false;
 
-    const overlay = new Graphics();
-    overlay.rect(0, 0, BOARD_SIZE, BOARD_SIZE);
-    overlay.fill({ color: 0x000000, alpha: 0.4 });
-    overlay.zIndex = 3;
-    overlay.label = "modalObject";
-
+    const overlay = this.#createOverlay();
     this.stage.addChild(overlay);
   }
 
@@ -107,14 +104,25 @@ class Game {
     this.isPlay = false;
     this.clearObject("gameObject");
 
+    const overlay = this.#createOverlay();
+    this.stage.addChild(overlay);
+
+    const gameOverText = this.#createGameOverText();
+    this.stage.addChild(gameOverText);
+
+    this.#updateUserScore();
+  }
+
+  #createOverlay() {
     const overlay = new Graphics();
     overlay.rect(0, 0, BOARD_SIZE, BOARD_SIZE);
     overlay.fill({ color: 0x000000, alpha: 0.4 });
     overlay.zIndex = 3;
-    overlay.label = "gameObject";
+    overlay.label = "modalObject";
+    return overlay;
+  }
 
-    this.stage.addChild(overlay);
-
+  #createGameOverText() {
     const gameOverText = new Text({
       text: "Game Over",
       style: {
@@ -128,10 +136,7 @@ class Game {
     gameOverText.position.set(BOARD_SIZE / 2, BOARD_SIZE / 2);
     gameOverText.label = "gameObject";
     gameOverText.zIndex = 4;
-
-    this.stage.addChild(gameOverText);
-
-    this.updateUserScore();
+    return gameOverText;
   }
 }
 

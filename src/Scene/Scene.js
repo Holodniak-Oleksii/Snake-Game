@@ -1,8 +1,8 @@
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "@/";
-import Game from "@/context/game";
+import Game from "@/App/Game";
 import { Container } from "pixi.js";
-import Board from "./board";
-import Menu from "./menu";
+import Board from "./Board";
+import Menu from "./Menu";
 
 class Scene extends Container {
   constructor(app) {

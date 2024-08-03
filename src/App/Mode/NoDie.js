@@ -1,6 +1,6 @@
 import { BOARD_SIZE } from "@/";
-import { checkCollision } from "@/utils/helpers";
-import ClassicMode from "./classic";
+import { checkCollision } from "@/Util/helpers";
+import ClassicMode from "./Classic";
 
 class NoDieMode extends ClassicMode {
   constructor(game) {

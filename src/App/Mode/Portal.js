@@ -1,7 +1,7 @@
-import Portal from "@/components/objects/portal";
-import Snake from "@/components/objects/snake";
-import { checkCollision } from "@/utils/helpers";
-import ClassicMode from "./classic";
+import Portal from "@/Entity/Portal";
+import Snake from "@/Entity/Snake";
+import { checkCollision } from "@/Util/helpers";
+import ClassicMode from "./Classic";
 
 class PortalMode extends ClassicMode {
   constructor(game) {

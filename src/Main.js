@@ -1,4 +1,4 @@
-import Scene from "@/components/scene";
+import Scene from "@/Scene/Scene";
 
 class MainScene {
   constructor(app) {
