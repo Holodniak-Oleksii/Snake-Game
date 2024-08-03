@@ -12,7 +12,6 @@ class Portal {
     this.apple1.reposition(snake);
     this.apple2.reposition(snake);
 
-    // Ensure the two apples do not spawn in the same location
     while (
       this.apple1.position.x === this.apple2.position.x &&
       this.apple1.position.y === this.apple2.position.y
