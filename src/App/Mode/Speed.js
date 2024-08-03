@@ -1,5 +1,5 @@
 import { checkCollision } from "@/Utils/helpers";
-import ClassicMode from "./classic";
+import ClassicMode from "./Classic";
 
 class SpeedMode extends ClassicMode {
   constructor(game) {

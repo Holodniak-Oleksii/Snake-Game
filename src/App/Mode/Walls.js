@@ -3,7 +3,7 @@ import Apple from "@/Entity/Apple";
 import Snake from "@/Entity/Snake";
 import Wall from "@/Entity/Wall";
 import { checkCollision } from "@/Utils/helpers";
-import ClassicMode from "./classic";
+import ClassicMode from "./Classic";
 
 class WallsMode extends ClassicMode {
   constructor(game) {

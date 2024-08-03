@@ -1,10 +1,10 @@
 import { MENU_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH } from "@/";
-import Game from "@/context/game";
-import User from "@/context/user";
+import Game from "@/App/Game";
+import User from "@/App/User";
 import Button from "@/UI/Button";
 import Label from "@/UI/Label";
+import List from "@/UI/List";
 import { Container, Graphics, Text, TextStyle } from "pixi.js";
-import ModeList from "./mode-list";
 
 class Menu extends Container {
   constructor() {
@@ -182,7 +182,7 @@ class Menu extends Container {
   }
 
   #drawModeList() {
-    this.modeList = new ModeList();
+    this.modeList = new List();
     this.addChild(this.modeList);
   }
 

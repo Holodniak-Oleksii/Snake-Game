@@ -1,12 +1,12 @@
 import { BOARD_SIZE, GAME_MODE } from "@/";
 import Snake from "@/Entity/Snake";
-import User from "@/context/user";
 import { Graphics, Text } from "pixi.js";
-import ClassicMode from "./classic";
-import NoDieMode from "./no-die";
-import PortalMode from "./portal";
-import SpeedMode from "./speed";
-import WallsMode from "./walls";
+import ClassicMode from "./Mode/Classic";
+import NoDieMode from "./Mode/NoDie";
+import PortalMode from "./Mode/Portal";
+import SpeedMode from "./Mode/Speed";
+import WallsMode from "./Mode/Walls";
+import User from "./User";
 
 class Game {
   constructor(stage) {

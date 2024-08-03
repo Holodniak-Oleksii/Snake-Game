@@ -1,4 +1,4 @@
-import MainScene from "@/screens/main";
+import MainScene from "@/Main";
 import { Application, Assets } from "pixi.js";
 import manifest from "../manifest.json";
 
