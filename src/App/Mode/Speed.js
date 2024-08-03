@@ -1,4 +1,4 @@
-import { checkCollision } from "@/Utils/helpers";
+import { checkCollision } from "@/Util/helpers";
 import ClassicMode from "./Classic";
 
 class SpeedMode extends ClassicMode {
