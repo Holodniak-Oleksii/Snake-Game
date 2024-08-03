@@ -1,7 +1,7 @@
 import { BOARD_SIZE } from "@/";
 import Apple from "@/Entity/Apple";
 import Snake from "@/Entity/Snake";
-import { checkCollision } from "@/Util/helpers";
+import { checkCollision } from "@/Utils/helpers";
 import GameMode from "./ModeAbstraction";
 
 class ClassicMode extends GameMode {
