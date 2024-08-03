@@ -1,5 +1,5 @@
 import { BOARD_SIZE } from "@/";
-import { checkCollision } from "@/Util/helpers";
+import { checkCollision } from "@/Utils/helpers";
 import ClassicMode from "./Classic";
 
 class NoDieMode extends ClassicMode {
